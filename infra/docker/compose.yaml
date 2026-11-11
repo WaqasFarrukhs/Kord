@@ -1,0 +1,77 @@
+name: kord
+services:
+  db:
+    image: postgres:17.7-bookworm
+    environment:
+      POSTGRES_USER: kord
+      POSTGRES_DB: kord
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?Set POSTGRES_PASSWORD}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    restart: unless-stopped
+    healthcheck:
+      test: [CMD-SHELL, 'pg_isready -U kord -d kord']
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks: [private]
+  migrate:
+    build:
+      context: ../..
+      dockerfile: infra/docker/Dockerfile
+      target: api
+    command: [node, dist/migrate.js]
+    environment:
+      NODE_ENV: production
+      DATABASE_URL: ${DATABASE_URL:?Set URL-encoded DATABASE_URL}
+      WEB_ORIGINS: https://${DOMAIN:?Set DOMAIN}
+    depends_on:
+      db: { condition: service_healthy }
+    networks: [private]
+    restart: 'no'
+  api:
+    build:
+      context: ../..
+      dockerfile: infra/docker/Dockerfile
+      target: api
+    environment:
+      NODE_ENV: production
+      DATABASE_URL: ${DATABASE_URL:?Set DATABASE_URL}
+      WEB_ORIGINS: https://${DOMAIN:?Set DOMAIN}
+      PORT: 3000
+    depends_on:
+      migrate: { condition: service_completed_successfully }
+    restart: unless-stopped
+    healthcheck:
+      test: [CMD, node, -e, "fetch('http://127.0.0.1:3000/api/v1/ready').then(r=>process.exit(r.ok?0:1)).catch(()=>process.exit(1))"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+    networks: [private, edge]
+  web:
+    build:
+      context: ../..
+      dockerfile: infra/docker/Dockerfile
+      target: web
+    environment:
+      DOMAIN: ${DOMAIN:?Set DOMAIN}
+    ports: ['80:80', '443:443', '443:443/udp']
+    volumes:
+      - caddy_data:/data
+      - caddy_config:/config
+    depends_on:
+      api: { condition: service_healthy }
+    restart: unless-stopped
+    healthcheck:
+      test: [CMD, wget, -q, -O, /dev/null, 'http://127.0.0.1:8080/health']
+      interval: 30s
+      timeout: 5s
+      retries: 3
+    networks: [edge]
+networks:
+  private: { internal: true }
+  edge:
+volumes:
+  postgres_data:
+  caddy_data:
+  caddy_config:

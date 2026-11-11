@@ -1,0 +1,10 @@
+{
+ "expo": {
+  "name": "Kord", "slug": "kord", "scheme": "kord", "version": "0.1.0",
+  "orientation": "default", "userInterfaceStyle": "automatic",
+  "ios": { "supportsTablet": true, "bundleIdentifier": "app.kord.client" },
+  "android": { "package": "app.kord.client" },
+  "web": { "bundler": "metro", "output": "single", "name": "Kord" },
+  "plugins": ["expo-router", "expo-secure-store"]
+ }
+}
