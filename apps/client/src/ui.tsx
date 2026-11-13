@@ -1,10 +1,10 @@
 import type { PropsWithChildren } from 'react';
 import { Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { tokens, useTheme } from './theme';
-export function Page({ title, subtitle, children }: PropsWithChildren<{ title: string; subtitle: string }>) {
+export function Page({ title, subtitle, children, hideEyebrowFromScreenReader = false }: PropsWithChildren<{ title: string; subtitle: string; hideEyebrowFromScreenReader?: boolean }>) {
   const { colors } = useTheme();
   return <ScrollView contentContainerStyle={styles.page}><View style={styles.content}>
-    <Text style={[styles.eyebrow, { color: colors.accent }]}>YOUR SPACE, SIMPLIFIED</Text>
+    <Text aria-hidden={hideEyebrowFromScreenReader || undefined} style={[styles.eyebrow, { color: colors.accent }]}>YOUR SPACE, SIMPLIFIED</Text>
     <Text accessibilityRole="header" style={[styles.title, { color: colors.text }]}>{title}</Text>
     <Text style={[styles.subtitle, { color: colors.muted }]}>{subtitle}</Text>
     {children}

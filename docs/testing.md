@@ -39,11 +39,19 @@ pnpm --filter @kord/client exec expo export --platform android --platform ios --
 
 Playwright may require OS browser libraries (`pnpm exec playwright install-deps chromium`). The test runner starts ports 3000 and 8081; keep those available. In CI set `CI=1` to disable server reuse.
 
+## Physical Android device
+
+On 2026-11-13, the project owner confirmed that the Android build succeeded and Kord opened on a physical phone. After starting the API, the app reported API connected and Database unavailable. Starting the development PostgreSQL container and retrying changed the status to Database ready. The owner also reported that the app functioned as expected during the phone navigation and appearance walkthrough.
+
+The owner confirmed that TalkBack announces the result after activating Check again and reads Connection when opening that screen. Further announcement polish is deferred until the UI and wording are settled.
+
+With TalkBack off, the owner verified that stopping and restarting the development database changed the Android app's status from Database ready to Database unavailable and back to Database ready.
+
 ## Remaining acceptance checks
 
-Build and install Android on an emulator and a physical device. Configure a reachable server and verify successful connection checks and failure/retry recovery. Repeat on iOS using a Mac and a device. Confirm safe-area navigation and accessibility.
+The owner confirmed Kord runs on the Pixel 7 emulator and shows API connected and Database ready. Further TalkBack checks are deferred until the UI and wording are settled. On iOS, build and install Kord using a Mac and a device, then verify connectivity, failure/retry recovery, navigation, and accessibility.
 
-Local Docker, Caddy HTTPS, migration re-run, and backup/restore checks passed. Native builds and device connectivity are pending. Phase 2 has not started.
+Local Docker, Caddy HTTPS, migration re-run, and backup/restore checks passed. Physical Android build and connectivity checks passed. Pixel 7 emulator connectivity passed. iOS checks are pending. Phase 2 has not started.
 
 ## Checkpoints
 
