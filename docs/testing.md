@@ -59,4 +59,22 @@ Git was initialized on 2026-11-11. The GitHub remote is https://github.com/Waqas
 
 ## Appearance switches
 
-The appearance settings use Follow device settings and Dark mode switches. Changing Dark mode disables automatic matching; disabling automatic matching preserves the current appearance. Preferences remain session-only. Desktop and mobile browser checks cover both device themes, manual overrides, and returning to automatic matching. The theme provider uses a stable appearance subscription to track device changes while the screen stays open. Native confirmation of the new switches is pending.
+The appearance settings use Follow device settings and Dark mode switches. Changing Dark mode disables automatic matching; disabling automatic matching preserves the current appearance. Preferences remain session-only. Desktop and mobile browser checks cover both device themes, manual overrides, and returning to automatic matching. The theme provider uses a stable appearance subscription to track device changes while the screen stays open. The owner subsequently confirmed that the switches worked on Android under SDK 55; this must be rechecked with the SDK 58 native build.
+
+
+## SDK 58 upgrade verification (2026-11-13)
+
+Branch: codex/expo-58-xcode-27. Upgraded Expo to 58.0.25, React to 19.3.0 and React Native to 0.88.1, with aligned native dependencies and a pinned lockfile.
+
+Passed on SPC2 after a clean dependency installation:
+- ESLint and strict TypeScript checks.
+- All 11 Vitest tests.
+- Both Playwright scenarios (desktop and mobile web), including navigation, live API connectivity and automatic/manual appearance switching. Isolated API/web ports 3101/8091 avoided the existing Android development server configuration.
+- Expo dependency compatibility check and all 20 Expo Doctor checks.
+- API production build and web export.
+- Android and iOS JavaScript/Hermes exports. These are not native builds.
+- iOS prebuild generation: SceneDelegate.swift, scene manifest, scene-based AppDelegate startup, and the configured app/Podfile deployment target of 17.0 were inspected.
+
+The initial in-place dependency upgrade left nested SDK 55 log-box packages; a clean frozen-lockfile installation removed them. Expo Doctor also required npm on PATH in the agent runtime; temporary diagnostic tools were installed outside the repository.
+
+The Mac's earlier SDK 55/Xcode 27 app compiled after a local deployment-target adjustment but stopped at NoSceneLifecycleAdoption. The SDK 58 native iOS build and launch are pending on the Mac, as are renewed Android native checks. Phase 1 is not complete. Follow [the Mac upgrade guide](ios-upgrade.md).
