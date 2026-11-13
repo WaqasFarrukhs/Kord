@@ -1,7 +1,46 @@
-import { View } from 'react-native';
-import { Page, Panel, Copy, Button } from '../src/ui';
-import { useTheme } from '../src/theme';
+import { StyleSheet, Switch, View } from 'react-native';
+import { Page, Panel, Copy } from '../src/ui';
+import { tokens, useTheme } from '../src/theme';
+
 export default function Settings() {
-  const { mode, setMode } = useTheme();
-  return <Page title="Make yourself at home." subtitle="A clear, comfortable workspace on every screen."><Panel><Copy heading>Appearance</Copy><Copy>Current preference: {mode}. This preference applies for the current app session.</Copy><View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 12 }}>{(['system', 'light', 'dark'] as const).map(value => <Button key={value} title={value === 'system' ? 'Use device setting' : value === 'light' ? 'Light' : 'Dark'} disabled={mode === value} onPress={() => setMode(value)} />)}</View></Panel></Page>;
+  const { mode, setMode, isDark, colors } = useTheme();
+  return <Page title="Make yourself at home." subtitle="A clear, comfortable workspace on every screen.">
+    <Panel>
+      <Copy heading>Appearance</Copy>
+      <View style={styles.row}>
+        <View style={styles.label}>
+          <Copy heading>Follow device settings</Copy>
+          <Copy>Automatically match your device’s light or dark appearance.</Copy>
+        </View>
+        <View style={styles.switch}><Switch
+          accessibilityLabel="Follow device settings"
+          value={mode === 'system'}
+          onValueChange={followDevice => setMode(followDevice ? 'system' : isDark ? 'dark' : 'light')}
+          trackColor={{ false: colors.border, true: colors.accent }}
+          hitSlop={12}
+        /></View>
+      </View>
+      <View style={styles.row}>
+        <View style={styles.label}>
+          <Copy heading>Dark mode</Copy>
+          <Copy>{isDark ? 'Dark' : 'Light'} · Off for light, on for dark. Changing this turns off “Follow device settings”.</Copy>
+        </View>
+        <View style={styles.switch}><Switch
+          accessibilityLabel="Dark mode"
+          accessibilityHint="Off selects light. On selects dark. Changing this turns off Follow device settings."
+          value={isDark}
+          onValueChange={dark => setMode(dark ? 'dark' : 'light')}
+          trackColor={{ false: colors.border, true: colors.accent }}
+          hitSlop={12}
+        /></View>
+      </View>
+      <Copy>This preference applies for the current app session.</Copy>
+    </Panel>
+  </Page>;
 }
+
+const styles = StyleSheet.create({
+  row: { flexDirection: 'row', alignItems: 'center', gap: tokens.space.md },
+  label: { flex: 1, gap: tokens.space.xs },
+  switch: { minWidth: tokens.touchTarget, minHeight: tokens.touchTarget, alignItems: 'center', justifyContent: 'center' },
+});

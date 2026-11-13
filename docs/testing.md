@@ -56,3 +56,7 @@ Local Docker, Caddy HTTPS, migration re-run, and backup/restore checks passed. P
 ## Checkpoints
 
 Git was initialized on 2026-11-11. The GitHub remote is https://github.com/WaqasFarrukhs/Kord.git. Use `git log --oneline` to inspect local commits and `git status -sb` to inspect synchronization with GitHub. Earlier source checkpoints are saved under `.checkpoints/` (excluded from source control). Commit source plus `pnpm-lock.yaml`, keeping environment secrets and build outputs excluded.
+
+## Appearance switches
+
+The appearance settings use Follow device settings and Dark mode switches. Changing Dark mode disables automatic matching; disabling automatic matching preserves the current appearance. Preferences remain session-only. Desktop and mobile browser checks cover both device themes, manual overrides, and returning to automatic matching. The theme provider uses a stable appearance subscription to track device changes while the screen stays open. Native confirmation of the new switches is pending.
