@@ -9,7 +9,7 @@ test('navigation, appearance and real API connectivity', async ({ page }, testIn
   await expect(page.getByRole('heading', { name: 'API connected' })).toBeVisible({ timeout: 15000 });
   await expect(page.getByText(/Database (ready|unavailable)/)).toBeVisible();
   await page.getByRole('link', { name: 'Settings', exact: true }).click();
-  const followDevice = page.getByRole('switch', { name: 'Follow device settings', exact: true });
+  const followDevice = page.getByRole('switch', { name: 'Follow device theme', exact: true });
   const darkMode = page.getByRole('switch', { name: 'Dark mode', exact: true });
   await page.emulateMedia({ colorScheme: 'light' });
   await expect(followDevice).toBeChecked();

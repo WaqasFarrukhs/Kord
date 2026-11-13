@@ -51,7 +51,7 @@ With TalkBack off, the owner verified that stopping and restarting the developme
 
 The owner confirmed Kord runs on the Pixel 7 emulator and shows API connected and Database ready. Further TalkBack checks are deferred until the UI and wording are settled. On iOS, build and install Kord using a Mac and a device, then verify connectivity, failure/retry recovery, navigation, and accessibility.
 
-Local Docker, Caddy HTTPS, migration re-run, and backup/restore checks passed. Physical Android build and connectivity checks passed. Pixel 7 emulator connectivity passed. iOS checks are pending. Phase 2 has not started.
+Local Docker, Caddy HTTPS, migration re-run, and backup/restore checks passed. Physical Android build and connectivity checks passed. Pixel 7 emulator connectivity passed. The SDK 58 simulator results are recorded below. Phase 2 has not started.
 
 ## Checkpoints
 
@@ -77,4 +77,4 @@ Passed on SPC2 after a clean dependency installation:
 
 The initial in-place dependency upgrade left nested SDK 55 log-box packages; a clean frozen-lockfile installation removed them. Expo Doctor also required npm on PATH in the agent runtime; temporary diagnostic tools were installed outside the repository.
 
-The Mac's earlier SDK 55/Xcode 27 app compiled after a local deployment-target adjustment but stopped at NoSceneLifecycleAdoption. The SDK 58 native iOS build and launch are pending on the Mac, as are renewed Android native checks. Phase 1 is not complete. Follow [the Mac upgrade guide](ios-upgrade.md).
+The Mac's earlier SDK 55/Xcode 27 app compiled after a local deployment-target adjustment but stopped at NoSceneLifecycleAdoption. The owner confirmed that the SDK 58 build launched from Xcode on iPhone 17, responded to taps, connected to SPC2, and showed database outage and recovery correctly. The owner also confirmed the rebuilt SDK 58 app and updated appearance controls worked on the Pixel 7 emulator. Phase 1 is complete with these simulator checks. Physical iPhone testing and further accessibility checks are deferred. Follow [the Mac upgrade guide](ios-upgrade.md).
